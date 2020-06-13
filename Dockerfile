@@ -6,8 +6,8 @@ RUN dpkg --add-architecture i386
 RUN set -ex; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
-	  wine32 \
-	  wine \    
+      wine32 \
+      wine \    
       bash \
       fluxbox \
       git \
