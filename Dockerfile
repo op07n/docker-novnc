@@ -1,29 +1,29 @@
-FROM debian:stretch
+FROM node:10
+ENV DEBIAN_FRONTEND noninteractive
+
 
 # Install git, supervisor, VNC, & X11 packages
 RUN set -ex; 
 
-RUN apt-get update && apt-get install -y curl;
-
-RUN apt-get install -y --no-install-recommends software-properties-common && dpkg --add-architecture i386 && curl -L https://dl.winehq.org/wine-builds/winehq.key > winehq.key && apt-key add winehq.key && apt-add-repository https://dl.winehq.org/wine-builds/debian && \
-  apt-get update && \
-  apt-get -y purge software-properties-common libdbus-glib-1-2 python3-dbus python3-gi python3-pycurl python3-software-properties && \
-  apt-get install -y --no-install-recommends winehq-stable fakeroot libxss1 \
-  
+RUN apt-get update \
+  && apt-get install -y software-properties-common apt-transport-https \
+  && dpkg --add-architecture i386 \
+  && wget -nc https://dl.winehq.org/wine-builds/winehq.key \
+  && apt-key add winehq.key \
+  && apt-add-repository https://dl.winehq.org/wine-builds/debian/ \
+  && apt-get update \
   && apt-get install -y --install-recommends winehq-stable xvfb \
-  && apt-get install -y bash \
-  && apt-get install -y fluxbox \
-  && apt-get install -y git \
-  && apt-get install -y net-tools \
-  && apt-get install -y novnc \
-  && apt-get install -y socat \
-  && apt-get install -y supervisor \
-  && apt-get install -y x11vnc \
-  && apt-get install -y xterm \  
-  
-  # clean
-  && apt-get clean && rm -rf /var/lib/apt/lists/* && unlink winehq.key      
-      
+  && apt-get remove -y software-properties-common apt-transport-https \
+  && apt-get clean -y \
+  && apt-get autoremove -y
+
+
+
+
+
+
+
+
       
 # Setup demo environment variables
 ENV HOME=/root \
