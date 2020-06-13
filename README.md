@@ -1,3 +1,7 @@
+Duplicate of https://github.com/0x77dev/docker-novnc
+
+
+
 # noVNC Display Container for Heroku
 ```
 ```
