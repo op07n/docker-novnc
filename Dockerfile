@@ -1,9 +1,13 @@
 FROM debian:stretch
 
+RUN dpkg --add-architecture i386
+
 # Install git, supervisor, VNC, & X11 packages
 RUN set -ex; \
     apt-get update; \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
+	  wine32 \
+	  wine \    
       bash \
       fluxbox \
       git \
