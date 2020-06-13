@@ -1,24 +1,29 @@
 FROM debian:stretch
 
-RUN dpkg --add-architecture i386
-
 # Install git, supervisor, VNC, & X11 packages
-RUN set -ex; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends \
-      wine32 \
-      wine \    
-      bash \
-      fluxbox \
-      git \
-      net-tools \
-      novnc \
-      socat \
-      supervisor \
-      x11vnc \
-      xterm \
-      xvfb
-
+RUN set -ex; 
+      
+RUN apt-get update \
+  && apt-get install -y software-properties-common apt-transport-https \
+  && dpkg --add-architecture i386 \
+  && wget -nc https://dl.winehq.org/wine-builds/winehq.key \
+  && apt-key add winehq.key \
+  && apt-add-repository https://dl.winehq.org/wine-builds/debian/ \
+  && apt-get update \
+  && apt-get install -y --install-recommends winehq-stable xvfb \
+  && apt-get install -y bash \
+  && apt-get install -y fluxbox \
+  && apt-get install -y git \
+  && apt-get install -y net-tools \
+  && apt-get install -y novnc \
+  && apt-get install -y socat \
+  && apt-get install -y supervisor \
+  && apt-get install -y x11vnc \
+  && apt-get install -y xterm \
+  && apt-get remove -y software-properties-common apt-transport-https \
+  && apt-get clean -y \
+  && apt-get autoremove -y      
+      
 # Setup demo environment variables
 ENV HOME=/root \
     DEBIAN_FRONTEND=noninteractive \
