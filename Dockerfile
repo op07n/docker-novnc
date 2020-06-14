@@ -1,27 +1,35 @@
-FROM node:10
-ENV DEBIAN_FRONTEND noninteractive
+FROM debian:buster-slim
+
+
+RUN apt-get update && \
+	apt-get -y install --no-install-recommends wget locales procps && \
+	touch /etc/locale.gen && \
+	echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+	locale-gen && \
+	apt-get -y install --reinstall ca-certificates && \
+	rm -rf /var/lib/apt/lists/*
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+
 
 
 # Install git, supervisor, VNC, & X11 packages
 RUN set -ex; 
 
-RUN apt-get update \
-  && apt-get install -y software-properties-common apt-transport-https \
-  && dpkg --add-architecture i386 \
-  && wget -nc https://dl.winehq.org/wine-builds/winehq.key \
-  && apt-key add winehq.key \
-  && apt-add-repository https://dl.winehq.org/wine-builds/debian/ \
-  && apt-get update \
-  && apt-get install -y --install-recommends winehq-stable xvfb \
-  && apt-get remove -y software-properties-common apt-transport-https \
-  && apt-get clean -y \
-  && apt-get autoremove -y
 
-
-
-
-
-
+RUN dpkg --add-architecture i386 && \
+	apt-get update && \
+	apt -y install gnupg2 software-properties-common && \
+	wget -qO - https://dl.winehq.org/wine-builds/winehq.key | apt-key add - && \
+	apt-add-repository https://dl.winehq.org/wine-builds/debian/ && \
+	wget -O- -q https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10/Release.key | apt-key add - && \
+	echo "deb http://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10 ./" | tee /etc/apt/sources.list.d/wine-obs.list && \
+	apt-get update && \
+	apt -y install --install-recommends winehq-stable && \
+	apt-get -y --purge remove software-properties-common gnupg2 && \
+	apt-get -y autoremove && \
+	rm -rf /var/lib/apt/lists/*
 
 
       
