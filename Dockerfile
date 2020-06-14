@@ -26,23 +26,22 @@ RUN dpkg --add-architecture i386 && \
 	wget -O- -q https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10/Release.key | apt-key add - && \
 	echo "deb http://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10 ./" | tee /etc/apt/sources.list.d/wine-obs.list && \
 	apt-get update && \
+	
+	
+    apt-get install -y --no-install-recommends \
+      bash \
+      fluxbox \
+      git \
+      net-tools \
+      novnc \
+      socat \
+      supervisor \
+      x11vnc \
+      xterm \
+      xvfb && \	
+	
+	
 	apt -y install --install-recommends winehq-stable && \
-	
-  
-      bash  && \
-      fluxbox  && \
-      git  && \
-      net-tools  && \
-      novnc  && \
-      socat  && \
-      supervisor  && \
-      x11vnc  && \
-      xterm  && \
-      xvfb  && \
-	
-	
-	
-	
 	apt-get -y --purge remove software-properties-common gnupg2 && \
 	apt-get -y autoremove && \
 	rm -rf /var/lib/apt/lists/*
